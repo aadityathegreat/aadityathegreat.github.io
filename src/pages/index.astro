@@ -1,27 +1,41 @@
 ---
 import Base from "../layouts/Base.astro";
+import TraceRule from "../components/TraceRule.astro";
+import Interests from "../components/Interests.astro";
 
 const title = "Aaditya Ananth";
 const description =
   "Incoming biomedical engineering freshman at UT Austin. I build things that measure whether people are getting better.";
+
+// Keep this honest and current. A stale "right now" is worse than none, and the
+// EMT line must stay "in progress" until the NREMT actually happens — see the
+// ceiling note at the bottom of library/resume/master.md.
+const now = [
+  "Starting biomedical engineering at UT Austin this fall.",
+  "Working through an EMT course. Not certified yet, the exam and clinicals are still ahead.",
+  "Rebuilding my training log so it stops needing signal in the gym.",
+];
 ---
 
 <Base title={title} description={description} path="/">
   <header class="home-head">
-    <h1 class="identity-reveal">Aaditya Ananth</h1>
+    <h1 class="identity">Aaditya Ananth</h1>
     <p class="lede">
       Incoming biomedical engineering freshman at UT Austin, Cockrell School, class of 2030.
     </p>
   </header>
 
-  <section class="section" aria-labelledby="who">
+  <TraceRule />
+
+  <section aria-labelledby="who">
     <h2 class="visually-hidden" id="who">About</h2>
 
     <p>
       I grew up in Prosper, Texas and finished high school there in May 2026. Outside of class I'm
       usually lifting, playing tennis, or building something small that fixes an annoyance I have.
-      Most of those never leave my phone.
     </p>
+
+    <Interests />
 
     <p>
       I did policy debate for four years and started my school's team from nothing. That's where I
@@ -36,19 +50,30 @@ const description =
     </p>
   </section>
 
+  <section class="section" aria-labelledby="now">
+    <h2 class="section-head" id="now">Right now</h2>
+    <ul class="now-list">
+      {now.map((item) => <li>{item}</li>)}
+    </ul>
+  </section>
+
   <section class="section" aria-labelledby="elsewhere">
     <h2 class="section-head" id="elsewhere">Elsewhere on this site</h2>
 
     <ul class="doors">
       <li>
-        <a href="/research">Research</a>
+        <a href="/research"
+          >Research<span class="arrow" aria-hidden="true">&#8594;</span></a
+        >
         <span class="what">
           The stroke-aide device, a nine month study of neurology access in Texas, and time in a
           Neuro ICU.
         </span>
       </li>
       <li>
-        <a href="/building">Building</a>
+        <a href="/building"
+          >Building<span class="arrow" aria-hidden="true">&#8594;</span></a
+        >
         <span class="what">
           Small software. A dining recommender, a training log, and a few things nobody asked for.
         </span>
@@ -58,11 +83,14 @@ const description =
 </Base>
 
 <style>
-  /* Move 4 — one reveal, on one element, once. Job: preventing a jarring change
-     as the webfont and the first line land together. The moment this becomes a
-     per-section pattern it turns into the fade-in-on-scroll tell. */
-  .identity-reveal {
-    animation: identity-in 700ms var(--ease-out) both;
+  /* Move 4 — the name settles once, on load. Job: preventing a jarring change as
+     the webfont lands. Literata is variable, so the weight axis eases into place
+     underneath the reveal instead of the name simply appearing. One element,
+     once. It never becomes a per-section pattern. */
+  .identity {
+    animation:
+      identity-in 700ms var(--ease-out) both,
+      identity-weight 1100ms var(--ease-out) both;
   }
 
   @keyframes identity-in {
@@ -76,16 +104,56 @@ const description =
     }
   }
 
+  @keyframes identity-weight {
+    from {
+      font-variation-settings: "wght" 420;
+    }
+    to {
+      font-variation-settings: "wght" 600;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .identity-reveal {
+    .identity {
       animation: none;
       clip-path: none;
       opacity: 1;
+      font-variation-settings: "wght" 600;
     }
   }
 
   .home-head h1 {
     margin-bottom: var(--space-sm);
+  }
+
+  .now-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: var(--measure);
+  }
+
+  .now-list li {
+    padding: var(--space-sm) 0 var(--space-sm) var(--space-lg);
+    border-top: 1px solid var(--rule-faint);
+    position: relative;
+    color: var(--ink-dim);
+  }
+
+  .now-list li:first-child {
+    border-top: 0;
+  }
+
+  /* A tick mark, borrowed from the trial markers in the research graphic rather
+     than an icon set. It encodes "one item", which is more than a bullet does. */
+  .now-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1.55em;
+    width: 8px;
+    height: 1px;
+    background: var(--accent);
   }
 
   .doors {
@@ -109,13 +177,28 @@ const description =
     font-size: 1.25rem;
     font-weight: 500;
     text-decoration: none;
-    display: block;
+    display: inline-block;
     margin-bottom: var(--space-2xs);
   }
 
-  .doors a::after {
-    content: " \2192";
+  /* Move 8 — the arrow steps out on hover. Job: feedback. Transform only, no
+     scale on the card, nothing lifts. */
+  .doors .arrow {
+    display: inline-block;
+    margin-left: 0.4em;
     color: var(--accent);
+    transition: transform 220ms var(--ease-out);
+  }
+
+  .doors a:hover .arrow,
+  .doors a:focus-visible .arrow {
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .doors .arrow {
+      transition: none;
+    }
   }
 
   .doors .what {

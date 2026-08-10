@@ -1,0 +1,123 @@
+---
+/**
+ * The interests strip.
+ *
+ * Job: progressive disclosure. Deliberately the same interaction language as the
+ * metadata rail and the keyboard, so it reads as one system rather than a new
+ * trick bolted onto the home page.
+ *
+ * Everything here is from the personal hook bank in memory/wiki/entities/aadi.md.
+ * None of it is a resume claim, which is exactly why it belongs on the personal
+ * page and nowhere near /research.
+ */
+
+const interests = [
+  {
+    word: "lifting",
+    note: "Upper/lower and push-pull-legs, and most of my cooking is planned around it.",
+  },
+  {
+    word: "tennis",
+    note: "Played varsity for three years. Now I play it for fun, which is better.",
+  },
+  {
+    word: "policy debate",
+    note: "Four years, mostly kritiks. Founded my school's team and trained four state qualifiers.",
+  },
+  {
+    word: "building small tools",
+    note: "Usually to fix one specific annoyance. Most of them never leave my phone.",
+  },
+  {
+    word: "Terraria",
+    note: "That and Minecraft. Games where the point is that you make the thing yourself.",
+  },
+];
+---
+
+<div class="interests">
+  <p class="interests-line">
+    Into {
+      interests.map((it, i) => (
+        <>
+          <button type="button" class="interest" data-i={i} aria-describedby="interest-note">
+            {it.word}
+          </button>
+          {i < interests.length - 2 ? ", " : i === interests.length - 2 ? ", and " : "."}
+        </>
+      ))
+    }
+  </p>
+  <p id="interest-note" class="interest-note">Pick one.</p>
+</div>
+
+<style>
+  .interests {
+    margin: var(--space-lg) 0;
+  }
+
+  .interests-line {
+    max-width: var(--measure);
+    margin-bottom: var(--space-2xs);
+  }
+
+  .interest {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    color: var(--ink);
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    transition:
+      color 200ms ease,
+      text-decoration-color 200ms ease;
+  }
+
+  .interest:hover,
+  .interest[data-active] {
+    color: var(--accent);
+    text-decoration-color: var(--accent);
+  }
+
+  .interest-note {
+    color: var(--muted);
+    font-size: 0.9375rem;
+    max-width: var(--measure);
+    /* Reserved so swapping the line never shifts what is under it. */
+    min-height: 3.1em;
+    margin: 0;
+  }
+</style>
+
+<script>
+  const notes = [
+    "Upper/lower and push-pull-legs, and most of my cooking is planned around it.",
+    "Played varsity for three years. Now I play it for fun, which is better.",
+    "Four years, mostly kritiks. Founded my school's team and trained four state qualifiers.",
+    "Usually to fix one specific annoyance. Most of them never leave my phone.",
+    "That and Minecraft. Games where the point is that you make the thing yourself.",
+  ];
+
+  const note = document.getElementById("interest-note");
+  const words = document.querySelectorAll<HTMLButtonElement>(".interest");
+  const resting = note?.textContent ?? "";
+
+  function show(i: number | null) {
+    words.forEach((w, j) => w.toggleAttribute("data-active", j === i));
+    if (note) note.textContent = i === null || !notes[i] ? resting : notes[i];
+  }
+
+  words.forEach((w, i) => {
+    w.addEventListener("pointerenter", () => show(i));
+    w.addEventListener("focus", () => show(i));
+    w.addEventListener("click", () => show(i));
+    w.addEventListener("blur", () => show(null));
+  });
+
+  document.querySelector(".interests-line")?.addEventListener("pointerleave", () => show(null));
+</script>
