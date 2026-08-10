@@ -1,0 +1,152 @@
+---
+import Base from "../layouts/Base.astro";
+import Contact from "../components/Contact.astro";
+
+const title = "Goals — Aaditya Ananth";
+const description = "What I'm working toward, and an honest read on how far off most of it is.";
+
+// Sourced from the expanded goal statement in memory/wiki/entities/aadi.md
+// (Aadi's own words, 2026-07-11). The family motivation recorded there is
+// deliberately NOT on this page. Aadi decided 2026-08-10 to keep it off a public
+// page; it stays available for one-to-one cold emails.
+const nearTerm = [
+  {
+    k: "Undergrad",
+    v: "Biomedical engineering at UT Austin. The plan is to get into a lab early rather than wait until I've earned it on paper.",
+  },
+  {
+    k: "Clinical",
+    v: "Finish the EMT course, pass the NREMT, and get real hours. I want the patient contact to stay in front of me while I'm doing engineering coursework.",
+  },
+  {
+    k: "Keep building",
+    v: "More instruments, ideally ones that end up in someone's hands rather than a poster.",
+  },
+];
+---
+
+<Base title={title} description={description} path="/goals">
+  <header class="page-head">
+    <h1>Goals</h1>
+    <p class="lede">
+      The short version is that I want to practice medicine and run a lab at the same time. The
+      longer version is below, and I'm aware most of it is a long way off.
+    </p>
+  </header>
+
+  <section class="section" aria-labelledby="near">
+    <h2 class="section-head" id="near">The next four years</h2>
+    <dl class="facts">
+      {
+        nearTerm.map((n) => (
+          <div class="fact">
+            <dt>{n.k}</dt>
+            <dd>{n.v}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="section" aria-labelledby="arc">
+    <h2 class="section-head" id="arc">The longer arc</h2>
+
+    <p>
+      I want to be an academic neurosurgeon. Not only the operating side of it, though that is the
+      part people picture. The version I actually want is a physician-scientist, so that the
+      questions I run into treating people are the same questions I take back to a lab, and so that
+      teaching is part of the job rather than something I fit around it.
+    </p>
+
+    <p>
+      Further out I'd like to help build and run academic hospitals focused on neuroscience. That
+      means treating healthcare delivery as a design problem, and using technology and systems work
+      to fix things that are currently broken for reasons that have nothing to do with medicine.
+    </p>
+  </section>
+
+  <section class="section" aria-labelledby="why">
+    <h2 class="section-head" id="why">What I actually care about</h2>
+
+    <p>
+      Access, more than anything else. My independent study spent nine months on a version of this
+      question, looking at how neurologist supply, insurance rates and regional politics in Texas
+      line up with who ends up getting care and who doesn't. The finding that stuck with me is how
+      little of it is about medicine.
+    </p>
+
+    <p>
+      So the goal underneath the other goals is expanding access to neurological care for people who
+      currently do not have it, and training the people who come after me to do the same. That last
+      part matters to me. I have had good mentors and I know exactly how much difference they made.
+    </p>
+  </section>
+
+  <section class="section" aria-labelledby="caveat">
+    <h2 class="section-head" id="caveat">An honest note</h2>
+    <p class="caveat">
+      I haven't started college yet and none of this is decided. Writing it down is a way of being
+      accountable to it, not a claim that it's going to happen. If you're reading this in a few
+      years and it's changed, that's probably a good sign.
+    </p>
+  </section>
+
+  <Contact lead="If you work on any of this, I'd like to hear from you." />
+</Base>
+
+<style>
+  .page-head {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .page-head h1 {
+    margin-bottom: var(--space-sm);
+  }
+
+  .facts {
+    margin: 0;
+    max-width: var(--measure);
+  }
+
+  .fact {
+    padding: var(--space-md) 0;
+    border-top: 1px solid var(--rule-faint);
+  }
+
+  .fact:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .fact dt {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--muted);
+    margin-bottom: var(--space-2xs);
+  }
+
+  .fact dd {
+    margin: 0;
+    color: var(--ink-dim);
+  }
+
+  @media (min-width: 40rem) {
+    .fact {
+      display: grid;
+      grid-template-columns: 8rem 1fr;
+      gap: var(--space-lg);
+      align-items: baseline;
+    }
+
+    .fact dt {
+      margin-bottom: 0;
+      text-align: right;
+    }
+  }
+
+  .caveat {
+    color: var(--muted);
+    border-left: 0;
+    max-width: var(--measure);
+  }
+</style>

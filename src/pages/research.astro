@@ -1,6 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import MotorTrace from "../components/MotorTrace.astro";
+import Contact from "../components/Contact.astro";
 
 const title = "Research — Aaditya Ananth";
 const description =
@@ -118,13 +119,7 @@ const experience = [
     }
   </section>
 
-  <section class="section" aria-labelledby="reach">
-    <h2 class="section-head" id="reach">Get in touch</h2>
-    <p>
-      If any of this overlaps with what your lab works on, I'd like to hear about it. The fastest
-      way to reach me is <a href="mailto:aa228227&#64;eid.utexas.edu">aa228227&#64;eid.utexas.edu</a>.
-    </p>
-  </section>
+  <Contact lead="If any of this overlaps with what your lab works on, I'd like to hear about it." />
 </Base>
 
 <style>

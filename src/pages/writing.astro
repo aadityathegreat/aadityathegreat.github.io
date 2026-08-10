@@ -1,0 +1,97 @@
+---
+import Base from "../layouts/Base.astro";
+
+const title = "Writing — Aaditya Ananth";
+const description = "Notes and short pieces.";
+
+/**
+ * SCAFFOLD. Not linked from the nav yet, and that is deliberate.
+ *
+ * An empty /writing linked from every page costs more credibility than no
+ * /writing at all, because it advertises a habit that is not there. So this page
+ * exists, is styled, and is ready, but nobody can find it until there is at least
+ * one real post.
+ *
+ * To turn it on: add { href: "/writing", label: "Writing" } to the nav array in
+ * src/layouts/Base.astro, and add a door on the home page.
+ *
+ * Each post is an entry in this array for now. If it gets past roughly ten,
+ * move to Astro content collections and a src/content/writing/ folder of
+ * markdown instead of hand-editing this list.
+ */
+const posts: { title: string; date: string; blurb: string; href: string }[] = [];
+---
+
+<Base title={title} description={description} path="/writing">
+  <header class="page-head">
+    <h1>Writing</h1>
+    <p class="lede">Notes, mostly on things I got wrong the first time.</p>
+  </header>
+
+  {
+    posts.length === 0 ? (
+      <p class="empty">Nothing here yet.</p>
+    ) : (
+      <ul class="posts">
+        {posts.map((p) => (
+          <li>
+            <a href={p.href}>{p.title}</a>
+            <span class="date">{p.date}</span>
+            <span class="blurb">{p.blurb}</span>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</Base>
+
+<style>
+  .page-head {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .page-head h1 {
+    margin-bottom: var(--space-sm);
+  }
+
+  .empty {
+    color: var(--muted);
+  }
+
+  .posts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .posts li {
+    padding: var(--space-md) 0;
+    border-top: 1px solid var(--rule-faint);
+  }
+
+  .posts li:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .posts a {
+    font-family: var(--display);
+    font-size: 1.125rem;
+    font-weight: 500;
+    text-decoration: none;
+    display: block;
+  }
+
+  .posts .date {
+    font-size: 0.8125rem;
+    color: var(--muted);
+    display: block;
+    margin: var(--space-2xs) 0;
+  }
+
+  .posts .blurb {
+    color: var(--ink-dim);
+    display: block;
+    max-width: var(--measure);
+  }
+</style>

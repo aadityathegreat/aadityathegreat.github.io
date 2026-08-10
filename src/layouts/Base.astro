@@ -11,9 +11,14 @@ const { title, description, path = "/" } = Astro.props;
 const site = "https://aadityathegreat.github.io";
 const canonical = site + path;
 
+// /writing exists but is deliberately absent here until there is a real post on
+// it. An empty page linked from every other page advertises a habit that is not
+// there yet, which costs more than not having the page at all.
 const nav = [
+  { href: "/about", label: "About" },
   { href: "/research", label: "Research" },
   { href: "/building", label: "Building" },
+  { href: "/goals", label: "Goals" },
 ];
 ---
 
@@ -84,15 +89,12 @@ const nav = [
         <slot />
       </main>
 
+      <!-- Contact lives in its own block on the pages that warrant it, so this
+           stays a colophon rather than repeating the address twice per page. -->
       <footer class="colophon">
-        <p>
-          <a href="mailto:aa228227&#64;eid.utexas.edu">aa228227&#64;eid.utexas.edu</a>
-          <span class="dot">·</span>
-          <a href="https://github.com/aadityathegreat">GitHub</a>
-          <span class="dot">·</span>
-          <a href="https://www.linkedin.com/in/aaditya-ananth-824556391">LinkedIn</a>
+        <p class="set-in">
+          Set in Literata and Atkinson Hyperlegible Next. Built with Astro, no trackers.
         </p>
-        <p class="set-in">Set in Literata and Atkinson Hyperlegible Next. Built with Astro, no trackers.</p>
       </footer>
     </div>
   </body>

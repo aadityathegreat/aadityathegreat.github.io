@@ -1,0 +1,79 @@
+---
+/**
+ * The contact block. Used at the foot of the pages where someone might actually
+ * want to reach out, which is not every page.
+ *
+ * Deliberately not a "Get in touch!" CTA button. The reader arrived from a
+ * targeted email or a link someone sent them, so the useful thing is the address
+ * itself, large enough to tap and plain enough to copy.
+ */
+
+interface Props {
+  lead?: string;
+}
+
+const {
+  lead = "If any of this overlaps with something you're working on, I'd like to hear about it.",
+} = Astro.props;
+---
+
+<section class="section contact" aria-labelledby="contact">
+  <h2 class="section-head" id="contact">Contact</h2>
+
+  <p class="contact-lead">{lead}</p>
+
+  <a class="contact-email" href="mailto:aa228227&#64;eid.utexas.edu">aa228227&#64;eid.utexas.edu</a>
+
+  <ul class="contact-links">
+    <li><a href="https://github.com/aadityathegreat">GitHub</a></li>
+    <li><a href="https://www.linkedin.com/in/aaditya-ananth-824556391">LinkedIn</a></li>
+  </ul>
+</section>
+
+<style>
+  .contact-lead {
+    color: var(--ink-dim);
+  }
+
+  .contact-email {
+    font-family: var(--display);
+    font-size: clamp(1.25rem, 1rem + 1.2vw, 1.6rem);
+    font-weight: 500;
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0.15em;
+    display: inline-block;
+    /* Comfortably tappable, and the underline is the affordance rather than a
+       button that would make a personal page feel like a landing page. */
+    min-height: 44px;
+    transition: border-color 220ms ease;
+    /* Long address, small phone. Break rather than overflow. */
+    word-break: break-word;
+  }
+
+  .contact-email:hover,
+  .contact-email:focus-visible {
+    border-color: var(--accent);
+  }
+
+  .contact-links {
+    list-style: none;
+    display: flex;
+    gap: var(--space-xl);
+    margin: var(--space-lg) 0 0;
+    padding: 0;
+    font-size: 0.9375rem;
+  }
+
+  .contact-links a {
+    color: var(--muted);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .contact-links a:hover {
+    color: var(--accent);
+  }
+</style>

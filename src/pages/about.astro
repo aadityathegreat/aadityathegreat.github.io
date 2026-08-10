@@ -1,0 +1,165 @@
+---
+import Base from "../layouts/Base.astro";
+import Contact from "../components/Contact.astro";
+
+const title = "About — Aaditya Ananth";
+const description = "Prosper, policy debate, the gym, and the rest of what I do when I'm not in a lab.";
+
+// Plain facts, always visible. This was briefly a hover-reveal strip and it read
+// as link soup, so the detail just sits on the page now.
+const facts = [
+  { k: "Lifting", v: "Upper/lower right now. Most of my cooking is planned around it." },
+  { k: "Tennis", v: "Varsity for three years. Now I play it for fun, which is better." },
+  {
+    k: "Debate",
+    v: "Four years of policy, mostly kritiks. I founded my school's team and trained four state qualifiers.",
+  },
+  { k: "Games", v: "Terraria and Minecraft. The ones where the point is that you build the thing." },
+  { k: "Languages", v: "English and Tamil fluently. Spanish well enough to be useful." },
+];
+
+// Keep this current. A stale "right now" is worse than none, and the EMT line
+// stays "not certified" until the NREMT actually happens. See the ceiling note at
+// the bottom of library/resume/master.md.
+const now = [
+  "Starting biomedical engineering at UT Austin this fall.",
+  "Working through an EMT course. Not certified yet, the exam and clinicals are still ahead.",
+  "Rebuilding my training log so it stops needing signal in the gym.",
+];
+---
+
+<Base title={title} description={description} path="/about">
+  <header class="page-head">
+    <h1>About</h1>
+    <p class="lede">The parts that aren't on a resume.</p>
+  </header>
+
+  <section aria-labelledby="story">
+    <h2 class="visually-hidden" id="story">Background</h2>
+
+    <p>
+      I grew up in Prosper, Texas and finished high school there in May 2026. Outside of class I'm
+      usually lifting, playing tennis, or building something small that fixes one specific annoyance
+      I have. Most of those never leave my phone.
+    </p>
+
+    <p>
+      I did policy debate for four years and started my school's team from nothing. That's where I
+      learned to build an argument carefully and then have someone take it apart in front of me,
+      which turned out to be good practice for research. I also ran the student store, which meant
+      managing real money and a hundred people my own age, and taught me more about operations than
+      any class did.
+    </p>
+
+    <p>
+      The thread through most of it is stroke. I spent a summer in a Neuro ICU watching how care
+      actually happens, then a summer building an instrument to measure recovery, then most of two
+      years studying who in Texas can reach a neurologist at all. Those three things did not feel
+      connected while I was doing them.
+    </p>
+  </section>
+
+  <section class="section" aria-labelledby="facts">
+    <h2 class="section-head" id="facts">The rest of it</h2>
+    <dl class="facts">
+      {
+        facts.map((f) => (
+          <div class="fact">
+            <dt>{f.k}</dt>
+            <dd>{f.v}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="section" aria-labelledby="now">
+    <h2 class="section-head" id="now">Right now</h2>
+    <ul class="now-list">
+      {now.map((item) => <li>{item}</li>)}
+    </ul>
+  </section>
+
+  <Contact lead="Happy to talk about any of the above." />
+</Base>
+
+<style>
+  .page-head {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .page-head h1 {
+    margin-bottom: var(--space-sm);
+  }
+
+  .facts {
+    margin: 0;
+    max-width: var(--measure);
+  }
+
+  .fact {
+    padding: var(--space-sm) 0;
+    border-top: 1px solid var(--rule-faint);
+  }
+
+  .fact:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .fact dt {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--muted);
+    margin-bottom: var(--space-2xs);
+  }
+
+  .fact dd {
+    margin: 0;
+    color: var(--ink-dim);
+  }
+
+  @media (min-width: 40rem) {
+    .fact {
+      display: grid;
+      grid-template-columns: 7rem 1fr;
+      gap: var(--space-lg);
+      align-items: baseline;
+    }
+
+    .fact dt {
+      margin-bottom: 0;
+      text-align: right;
+    }
+  }
+
+  .now-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: var(--measure);
+  }
+
+  .now-list li {
+    padding: var(--space-sm) 0 var(--space-sm) var(--space-lg);
+    border-top: 1px solid var(--rule-faint);
+    position: relative;
+    color: var(--ink-dim);
+  }
+
+  .now-list li:first-child {
+    border-top: 0;
+  }
+
+  /* A tick mark, borrowed from the trial markers in the research graphic rather
+     than an icon set. It encodes "one item", which is more than a bullet does. */
+  .now-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1.55em;
+    width: 8px;
+    height: 1px;
+    background: var(--accent);
+  }
+</style>
