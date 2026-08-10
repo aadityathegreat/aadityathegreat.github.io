@@ -1,0 +1,88 @@
+---
+import Base from "../layouts/Base.astro";
+
+const title = "Building — Aaditya Ananth";
+const description = "Small software. A dining recommender, a training log, and a few tools I built for myself.";
+
+// Only public repos get links. Verified with `gh repo view <name> --json visibility`.
+// Private ones are listed without links on purpose rather than quietly dropped.
+const builds = [
+  {
+    name: "utdining",
+    what: "Ranks UT dining options against what Cronometer says you have left for the day. Built because deciding what to eat on campus is a worse problem than it sounds.",
+    stack: "TypeScript",
+    href: "https://github.com/aadityathegreat/utdining",
+  },
+  {
+    name: "liftlog",
+    what: "Offline-first strength training tracker. Installs to the home screen and works in a gym basement with no signal, which was the whole reason to build it instead of using an existing one.",
+    stack: "PWA",
+    href: null,
+  },
+  {
+    name: "fitcheck",
+    what: "Keeps track of what is clean, worn, or in the wash. Genuinely useful, slightly embarrassing.",
+    stack: "PWA",
+    href: null,
+  },
+  {
+    name: "notion-task-automation",
+    what: "A nightly job that tidies my task database and sends me a digest, so the list does not quietly rot.",
+    stack: "Node, GitHub Actions",
+    href: null,
+  },
+];
+---
+
+<Base title={title} description={description} path="/building">
+  <header class="page-head">
+    <h1>Building</h1>
+    <p class="lede">
+      Small things I made because I wanted them to exist. None of these are products. A couple are
+      genuinely useful and the rest were practice.
+    </p>
+  </header>
+
+  <section class="section" aria-labelledby="list">
+    <h2 class="visually-hidden" id="list">Projects</h2>
+
+    {
+      builds.map((b) => (
+        <article class="entry">
+          <div class="entry-rail">
+            <span>{b.stack}</span>
+            <span class="sep">·</span>
+            <span class="entry-note">{b.href ? "public" : "private"}</span>
+          </div>
+          <div>
+            <h3>{b.name}</h3>
+            <p>{b.what}</p>
+            {b.href && (
+              <p>
+                <a href={b.href}>Code on GitHub</a>
+              </p>
+            )}
+          </div>
+        </article>
+      ))
+    }
+  </section>
+
+  <section class="section" aria-labelledby="note">
+    <h2 class="section-head" id="note">A note on the private ones</h2>
+    <p>
+      Three of these are private repos, so the links go nowhere on purpose rather than by accident.
+      If you want to see one, ask and I'll walk you through it.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .page-head {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .page-head h1 {
+    margin-bottom: var(--space-sm);
+  }
+</style>

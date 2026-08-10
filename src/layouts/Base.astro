@@ -4,10 +4,17 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description: string;
+  path?: string;
 }
 
-const { title, description } = Astro.props;
-const site = "https://aadityathegreat.github.io/";
+const { title, description, path = "/" } = Astro.props;
+const site = "https://aadityathegreat.github.io";
+const canonical = site + path;
+
+const nav = [
+  { href: "/research", label: "Research" },
+  { href: "/building", label: "Building" },
+];
 ---
 
 <!doctype html>
@@ -19,7 +26,7 @@ const site = "https://aadityathegreat.github.io/";
 
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={site} />
+    <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
     <link
@@ -40,13 +47,53 @@ const site = "https://aadityathegreat.github.io/";
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={site} />
-    <meta property="og:image" content={`${site}og-image.png`} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${site}/og-image.png`} />
     <meta property="og:image:alt" content="Aaditya Ananth, research and selected work" />
     <meta name="twitter:card" content="summary_large_image" />
   </head>
 
   <body>
-    <slot />
+    <div class="shell">
+      <!-- Quiet nav. Two links and a name. The reader arrived from a targeted
+           email, not a search result, so they do not need a site map first. -->
+      <nav class="topbar" aria-label="Sections">
+        {
+          path === "/" ? (
+            <span class="topbar-name">Aaditya Ananth</span>
+          ) : (
+            <a class="topbar-name" href="/">
+              Aaditya Ananth
+            </a>
+          )
+        }
+        <ul>
+          {
+            nav.map((n) => (
+              <li>
+                <a href={n.href} aria-current={path === n.href ? "page" : undefined}>
+                  {n.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <main>
+        <slot />
+      </main>
+
+      <footer class="colophon">
+        <p>
+          <a href="mailto:aa228227&#64;eid.utexas.edu">aa228227&#64;eid.utexas.edu</a>
+          <span class="dot">·</span>
+          <a href="https://github.com/aadityathegreat">GitHub</a>
+          <span class="dot">·</span>
+          <a href="https://www.linkedin.com/in/aaditya-ananth-824556391">LinkedIn</a>
+        </p>
+        <p class="set-in">Set in Literata and Atkinson Hyperlegible Next. Built with Astro, no trackers.</p>
+      </footer>
+    </div>
   </body>
 </html>

@@ -1,0 +1,143 @@
+---
+import Base from "../layouts/Base.astro";
+import MotorTrace from "../components/MotorTrace.astro";
+
+const title = "Research — Aaditya Ananth";
+const description =
+  "A stroke-aide device for pianists, a nine month study of neurology access in Texas, and clinical time in a Neuro ICU.";
+
+// Everything here traces to library/resume/master.md or outreach-base.md.
+// Nothing gets added to this list that is not on one of those two.
+const experience = [
+  {
+    org: "AP Research and Career Independent Study",
+    place: "with Cook Children's Medical",
+    when: "Aug 2024 to May 2026",
+    status: "nine months",
+    body: [
+      "A study of how regional politics in Texas affect women's access to neurology care. I pulled statewide neurologist supply, insurance rates and stroke outcome data into one cross-sectional design and ran regressions on it.",
+      "I also built an adaptive learning system for neuroscience education, working with neurosurgeon Dr. Daniel Hansen to keep it close to how clinical training actually works.",
+    ],
+  },
+  {
+    org: "Youth Path Foundation",
+    place: "Frisco, TX",
+    when: "Aug 2025 to May 2026",
+    status: "research intern",
+    body: [
+      "PCR and gel electrophoresis on more than 30 DNA samples, supporting neurology and cytogenetics work.",
+    ],
+  },
+  {
+    org: "Medical City Plano, Neuro ICU",
+    place: "Plano, TX",
+    when: "Jun to Aug 2024",
+    status: "volunteer to intern",
+    body: [
+      "Checked more than 500 patient charts for accuracy across teams and cut redundant steps out of the documentation workflow, which brought patient update times down.",
+      "Bedside support during stroke and end of life cases. This is where the rehabilitation questions stopped being academic for me.",
+    ],
+  },
+];
+---
+
+<Base title={title} description={description} path="/research">
+  <header class="page-head">
+    <h1>Research</h1>
+    <p class="lede">
+      Mostly stroke, and mostly the same question. How do you tell whether someone is actually
+      getting better?
+    </p>
+  </header>
+
+  <section class="section" aria-labelledby="flagship">
+    <h2 class="section-head" id="flagship">Most recent</h2>
+
+    <div class="entry">
+      <div class="entry-rail">
+        <span>Jun to Jul 2025</span>
+        <span class="sep">·</span>
+        <span>UT Austin</span>
+        <span class="sep">·</span>
+        <span class="entry-note">completed</span>
+      </div>
+
+      <div>
+        <h3>A stroke-aide device for pianists</h3>
+        <p class="quiet">Freshman Research Initiative, High School Research Academy</p>
+        <p>
+          Playing the piano asks a hand to do something precise and repeatable, which makes it a
+          useful place to watch fine motor control. I built a device that reads what a pianist's
+          hands are doing, with a force sensor under each key and a microcontroller sampling them
+          while you play. It came in at 99.7% accuracy in lab testing.
+        </p>
+        <p>
+          I designed and ran the human subject side as well, more than 30 participants, to check
+          that the device measured what it claimed to. Patrick Benfield and Rhiannon Morris mentored
+          the research design and the analysis. The project took top presentation recognition at the
+          end of the program.
+        </p>
+
+        <MotorTrace />
+
+        <figure class="figure">
+          <div class="figure-pending">
+            Photograph of the device pending. Drop it in <code>public/img/</code> and swap this block.
+          </div>
+        </figure>
+
+        <p>
+          <a href="https://github.com/aadityathegreat/stroke-fine-motor-rehab"
+            >Firmware and analysis code on GitHub</a
+          >
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="before">
+    <h2 class="section-head" id="before">Before that</h2>
+
+    {
+      experience.map((e) => (
+        <article class="entry">
+          <div class="entry-rail">
+            <span>{e.when}</span>
+            <span class="sep">·</span>
+            <span class="entry-note">{e.status}</span>
+          </div>
+          <div>
+            <h3>{e.org}</h3>
+            <p class="quiet">{e.place}</p>
+            {e.body.map((para) => (
+              <p>{para}</p>
+            ))}
+          </div>
+        </article>
+      ))
+    }
+  </section>
+
+  <section class="section" aria-labelledby="reach">
+    <h2 class="section-head" id="reach">Get in touch</h2>
+    <p>
+      If any of this overlaps with what your lab works on, I'd like to hear about it. The fastest
+      way to reach me is <a href="mailto:aa228227&#64;eid.utexas.edu">aa228227&#64;eid.utexas.edu</a>.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .page-head {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .page-head h1 {
+    margin-bottom: var(--space-sm);
+  }
+
+  code {
+    font-family: ui-monospace, monospace;
+    font-size: 0.875em;
+  }
+</style>
