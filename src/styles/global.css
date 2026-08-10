@@ -153,6 +153,36 @@ hr {
 
 /* --------------------------------------------------------------------------- */
 
+/* Jumping to an in-page anchor should not pin the target to the very top edge. */
+:target,
+.entry[id] {
+  scroll-margin-top: var(--space-xl);
+}
+
+main:focus {
+  outline: none;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--space-lg);
+  top: var(--space-lg);
+  z-index: 2;
+  background: var(--raised);
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+  color: var(--ink);
+  padding: var(--space-xs) var(--space-md);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  /* Off-screen until focused, rather than display:none, so it stays reachable. */
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
 .shell {
   max-width: 46rem;
   margin: 0 auto;
@@ -482,5 +512,46 @@ hr {
   *::before,
   *::after {
     transition-duration: 120ms !important;
+  }
+}
+
+/* --- print -----------------------------------------------------------------
+   A reader who saves this to PDF should get a legible document, not fourteen
+   pages of near-black. Inverting for print is the one place a light rendering
+   is correct, because paper is the surface.
+   --------------------------------------------------------------------------- */
+
+@media print {
+  :root {
+    --page: #ffffff;
+    --raised: #f4f2ee;
+    --ink: #14120f;
+    --muted: #4a443c;
+    --accent: #6b4a1f;
+    --border: #c9c2b6;
+  }
+
+  body {
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  .skip-link,
+  .topbar,
+  .keyboard {
+    display: none;
+  }
+
+  /* Show where a link actually goes, since a printed page cannot be clicked. */
+  main a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: var(--muted);
+    word-break: break-all;
+  }
+
+  .entry,
+  .figure {
+    break-inside: avoid;
   }
 }

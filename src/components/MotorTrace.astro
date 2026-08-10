@@ -7,6 +7,9 @@
  *
  * Move 2 — the keyboard. Job: explanation. Pressing a key highlights the segment
  * of the trace that keystroke made and describes what the device was reading.
+ * Driven entirely by CSS `:has()`, so it works with JavaScript disabled and the
+ * site ships no script at all. Each key also carries its note as its accessible
+ * name, so a screen reader gets the same information the hover state shows.
  *
  * IMPORTANT, and the reason this is framed the way it is: no measured data from
  * the HSRA study was available at build time. The curve is schematic, its caption
@@ -97,8 +100,10 @@ const blackKeyAfter = [0, 1, 3, 4, 5];
     <div class="keys-white" role="group" aria-label="Keystrokes in the trace above">
       {
         events.map((_, i) => (
-          <button type="button" class="key" data-key={i} aria-describedby="trace-note">
-            <span class="visually-hidden">Keystroke {i + 1}</span>
+          <button type="button" class="key" data-key={i}>
+            <span class="visually-hidden">
+              Keystroke {i + 1}. {notes[i]}
+            </span>
           </button>
         ))
       }
@@ -109,9 +114,12 @@ const blackKeyAfter = [0, 1, 3, 4, 5];
   </div>
 
   <figcaption>
-    <p id="trace-note" class="trace-note">
-      Eight keystrokes. Hover or tap a key to see what the device was reading there.
-    </p>
+    <div class="notes">
+      <p class="note note-rest">
+        Eight keystrokes. Hover or press a key to see what the device was reading there.
+      </p>
+      {notes.map((n, i) => <p class="note" data-note={i}>{n}</p>)}
+    </div>
     <p class="trace-caveat">
       The curve is schematic, drawn to show the shape of a keystroke rather than plotted from the
       study's recordings.
@@ -171,8 +179,37 @@ const blackKeyAfter = [0, 1, 3, 4, 5];
     transition: opacity 240ms ease;
   }
 
-  .trace-band[data-active] {
+  /* --- the wiring ----------------------------------------------------------
+     One block per key, mapping a key to its band and its note. Written out
+     rather than generated because the mapping is the point and it should be
+     readable. `:focus` rather than `:focus-visible` on purpose: a tap on a
+     touch device is exactly when this needs to fire.
+     -------------------------------------------------------------------------- */
+
+  .trace:has(.key[data-key="0"]:is(:hover, :focus, :active)) .trace-band[data-band="0"],
+  .trace:has(.key[data-key="1"]:is(:hover, :focus, :active)) .trace-band[data-band="1"],
+  .trace:has(.key[data-key="2"]:is(:hover, :focus, :active)) .trace-band[data-band="2"],
+  .trace:has(.key[data-key="3"]:is(:hover, :focus, :active)) .trace-band[data-band="3"],
+  .trace:has(.key[data-key="4"]:is(:hover, :focus, :active)) .trace-band[data-band="4"],
+  .trace:has(.key[data-key="5"]:is(:hover, :focus, :active)) .trace-band[data-band="5"],
+  .trace:has(.key[data-key="6"]:is(:hover, :focus, :active)) .trace-band[data-band="6"],
+  .trace:has(.key[data-key="7"]:is(:hover, :focus, :active)) .trace-band[data-band="7"] {
     opacity: 0.09;
+  }
+
+  .trace:has(.key[data-key="0"]:is(:hover, :focus, :active)) .note[data-note="0"],
+  .trace:has(.key[data-key="1"]:is(:hover, :focus, :active)) .note[data-note="1"],
+  .trace:has(.key[data-key="2"]:is(:hover, :focus, :active)) .note[data-note="2"],
+  .trace:has(.key[data-key="3"]:is(:hover, :focus, :active)) .note[data-note="3"],
+  .trace:has(.key[data-key="4"]:is(:hover, :focus, :active)) .note[data-note="4"],
+  .trace:has(.key[data-key="5"]:is(:hover, :focus, :active)) .note[data-note="5"],
+  .trace:has(.key[data-key="6"]:is(:hover, :focus, :active)) .note[data-note="6"],
+  .trace:has(.key[data-key="7"]:is(:hover, :focus, :active)) .note[data-note="7"] {
+    opacity: 1;
+  }
+
+  .trace:has(.key:is(:hover, :focus, :active)) .note-rest {
+    opacity: 0;
   }
 
   /* --- the keyboard ------------------------------------------------------- */
@@ -204,8 +241,7 @@ const blackKeyAfter = [0, 1, 3, 4, 5];
     transform-origin: top center;
   }
 
-  .key:hover,
-  .key[data-active] {
+  .key:is(:hover, :focus, :active) {
     background: color-mix(in srgb, var(--accent) 55%, var(--ink));
   }
 
@@ -235,12 +271,43 @@ const blackKeyAfter = [0, 1, 3, 4, 5];
     margin-top: var(--space-md);
   }
 
-  .trace-note {
+  /* The notes are stacked in one reserved box, so swapping between them never
+     shifts the page and the whole set is in the DOM without JavaScript. */
+  .notes {
+    position: relative;
+    min-height: 3.1em;
+    margin-bottom: var(--space-2xs);
+  }
+
+  .note {
     color: var(--ink-dim);
     font-size: 0.9375rem;
-    margin-bottom: var(--space-2xs);
-    /* Reserve the space so swapping the text never shifts the page. */
-    min-height: 3.1em;
+    margin: 0;
+    transition: opacity 200ms ease;
+  }
+
+  .note[data-note] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+
+  /* No `:has()` means no way to swap them, so show the set as a plain list
+     rather than leaving eight paragraphs permanently invisible. */
+  @supports not selector(:has(*)) {
+    .notes {
+      min-height: 0;
+    }
+
+    .note-rest {
+      display: none;
+    }
+
+    .note[data-note] {
+      position: static;
+      opacity: 1;
+      margin-bottom: var(--space-2xs);
+    }
   }
 
   .trace-caveat {
@@ -267,40 +334,10 @@ const blackKeyAfter = [0, 1, 3, 4, 5];
     .key:active {
       transform: none;
     }
+
+    .note,
+    .trace-band {
+      transition: none;
+    }
   }
 </style>
-
-<script>
-  // The only script on the page. Everything else renders without JS, and this
-  // degrades to a static diagram with a readable caption if it never runs.
-  const notes = [
-    "Each key sits over its own force sensor. At rest it reads a steady baseline.",
-    "Attack. Force climbs as the key travels down.",
-    "Peak force, the largest reading in that stroke.",
-    "Release is slower than the attack, so the curve falls off gently.",
-    "The flat stretch between strokes is the interval.",
-    "Variation between strokes shows up as differing peak heights.",
-    "The microcontroller samples every key while you play.",
-    "Validated against 30+ participants during the HSRA study.",
-  ];
-
-  const note = document.getElementById("trace-note");
-  const keys = document.querySelectorAll<HTMLButtonElement>(".key");
-  const bands = document.querySelectorAll<SVGRectElement>(".trace-band");
-  const resting = note?.textContent ?? "";
-
-  function show(i: number | null) {
-    bands.forEach((b, j) => b.toggleAttribute("data-active", j === i));
-    keys.forEach((k, j) => k.toggleAttribute("data-active", j === i));
-    if (note) note.textContent = i === null || !notes[i] ? resting : notes[i];
-  }
-
-  keys.forEach((key, i) => {
-    key.addEventListener("pointerenter", () => show(i));
-    key.addEventListener("focus", () => show(i));
-    key.addEventListener("click", () => show(i));
-    key.addEventListener("blur", () => show(null));
-  });
-
-  document.querySelector(".keyboard")?.addEventListener("pointerleave", () => show(null));
-</script>

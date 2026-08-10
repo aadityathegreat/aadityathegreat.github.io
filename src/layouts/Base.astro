@@ -28,11 +28,15 @@ const nav = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="dark" />
+    <!-- Phone browser chrome matches the page instead of framing it in white. -->
+    <meta name="theme-color" content="#121110" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/icon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <link
       rel="preload"
@@ -50,19 +54,29 @@ const nav = [
     />
 
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Aaditya Ananth" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={`${site}/og-image.png`} />
-    <meta property="og:image:alt" content="Aaditya Ananth, research and selected work" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Aaditya Ananth. Biomedical engineering, UT Austin." />
     <meta name="twitter:card" content="summary_large_image" />
   </head>
 
   <body>
+    <!-- The nav sits above the content on every page, so a keyboard or screen
+         reader user otherwise walks five links before reaching the thing they
+         came for. Visible only when focused. -->
+    <a class="skip-link" href="#main">Skip to content</a>
+
     <div class="shell">
       <!-- Quiet nav. Two links and a name. The reader arrived from a targeted
            email, not a search result, so they do not need a site map first. -->
-      <nav class="topbar" aria-label="Sections">
+      <nav class="topbar" aria-label="Primary">
         {
           path === "/" ? (
             <span class="topbar-name">Aaditya Ananth</span>
@@ -85,7 +99,7 @@ const nav = [
         </ul>
       </nav>
 
-      <main>
+      <main id="main" tabindex="-1">
         <slot />
       </main>
 

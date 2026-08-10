@@ -11,6 +11,7 @@ const description =
 // Nothing gets added to this list that is not on one of those two.
 const experience = [
   {
+    id: "neurology-access",
     org: "AP Research and Career Independent Study",
     place: "with Cook Children's Medical",
     when: "Aug 2024 to May 2026",
@@ -21,6 +22,7 @@ const experience = [
     ],
   },
   {
+    id: "youth-path",
     org: "Youth Path Foundation",
     place: "Frisco, TX",
     when: "Aug 2025 to May 2026",
@@ -30,6 +32,7 @@ const experience = [
     ],
   },
   {
+    id: "neuro-icu",
     org: "Medical City Plano, Neuro ICU",
     place: "Plano, TX",
     when: "Jun to Aug 2024",
@@ -40,21 +43,76 @@ const experience = [
     ],
   },
 ];
+
+// The index at the top of the page. It exists because this is the page a PI opens
+// from a cold email, usually on a phone, and the first screen was previously
+// spending its whole height on a heading and a question. Four dated lines put the
+// actual evidence in front of a twenty second skim, and they double as in-page
+// navigation on mobile where the page is long. Every line is drawn from the
+// entries below, so it can never drift into a claim the page does not support.
+const index = [
+  {
+    href: "#device",
+    when: "Jun to Jul 2025",
+    what: "A stroke-aide device for pianists",
+    gloss: "a force sensor under every key, tested with 30+ participants at UT Austin",
+  },
+  {
+    href: "#neurology-access",
+    when: "Aug 2024 to May 2026",
+    what: "Neurology access across Texas",
+    gloss: "a nine month cross-sectional study, with Cook Children's Medical",
+  },
+  {
+    href: "#youth-path",
+    when: "Aug 2025 to May 2026",
+    what: "Youth Path Foundation",
+    gloss: "PCR and gel electrophoresis on more than 30 DNA samples",
+  },
+  {
+    href: "#neuro-icu",
+    when: "Jun to Aug 2024",
+    what: "Neuro ICU, Medical City Plano",
+    gloss: "500+ charts, and bedside time during stroke cases",
+  },
+];
 ---
 
 <Base title={title} description={description} path="/research">
   <header class="page-head">
     <h1>Research</h1>
+    <p class="who">
+      Biomedical engineering at UT Austin, Cockrell School, starting Fall 2026 with the class of
+      2030.
+    </p>
     <p class="lede">
-      Mostly stroke, and mostly the same question. How do you tell whether someone is actually
-      getting better?
+      So far the work has been mostly stroke, and mostly the same question. How do you tell whether
+      someone is actually getting better?
+    </p>
+
+    <nav class="head-index" aria-label="What is on this page">
+      <ol>
+        {
+          index.map((i) => (
+            <li>
+              <span class="when">{i.when}</span>
+              <a href={i.href}>{i.what}</a>
+              <span class="gloss">{i.gloss}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </nav>
+
+    <p class="head-reach">
+      Reach me at <a href="mailto:aa228227&#64;eid.utexas.edu">aa228227&#64;eid.utexas.edu</a>.
     </p>
   </header>
 
   <section class="section" aria-labelledby="flagship">
     <h2 class="section-head" id="flagship">Most recent</h2>
 
-    <div class="entry">
+    <div class="entry" id="device">
       <div class="entry-rail">
         <span>Jun to Jul 2025</span>
         <span class="sep">·</span>
@@ -101,7 +159,7 @@ const experience = [
 
     {
       experience.map((e) => (
-        <article class="entry">
+        <article class="entry" id={e.id}>
           <div class="entry-rail">
             <span>{e.when}</span>
             <span class="sep">·</span>
@@ -128,7 +186,100 @@ const experience = [
   }
 
   .page-head h1 {
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-2xs);
+  }
+
+  /* The affiliation reads as the note's metadata rather than as prose, which
+     keeps the question below it as the actual opening line. */
+  .who {
+    color: var(--muted);
+    font-size: 0.9375rem;
+    margin-bottom: var(--space-md);
+  }
+
+  /* --- the index -----------------------------------------------------------
+     The annotated-index half of the layout concept, used where it earns its
+     keep. Rules and dates carry the structure; there is no box around anything.
+     Numbers come from <ol> because the order is chronological and real, which
+     is the opposite of the decorative "01 / 02 / 03" tell the Chanel pass cut.
+     -------------------------------------------------------------------------- */
+
+  .head-index {
+    margin-top: var(--space-xl);
+    border-top: 1px solid var(--rule-faint);
+  }
+
+  .head-index ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .head-index li {
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--rule-faint);
+  }
+
+  .head-index .when {
+    display: block;
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+
+  .head-index a {
+    display: inline-block;
+    /* Comfortable to tap without turning the list into a stack of buttons. */
+    padding: var(--space-2xs) 0;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule);
+    transition: border-color 220ms ease;
+  }
+
+  .head-index a:hover,
+  .head-index a:focus-visible {
+    border-color: var(--accent);
+  }
+
+  .head-index .gloss {
+    display: block;
+    color: var(--muted);
+    font-size: 0.9375rem;
+    max-width: var(--measure);
+  }
+
+  .head-reach {
+    margin-top: var(--space-lg);
+    margin-bottom: 0;
+    font-size: 0.9375rem;
+    color: var(--muted);
+  }
+
+  @media (min-width: 52rem) {
+    /* Same rail geometry as the entries below, so the index reads as the table
+       of contents for the page rather than as a different component. */
+    .head-index li {
+      display: grid;
+      grid-template-columns: 9.5rem 1fr;
+      column-gap: var(--space-lg);
+      row-gap: var(--space-2xs);
+      align-items: baseline;
+    }
+
+    .head-index .when {
+      text-align: right;
+    }
+
+    .head-index a {
+      grid-column: 2;
+      /* Without this the anchor stretches to the whole column and its underline
+         reads as a section rule instead of as a link. */
+      justify-self: start;
+    }
+
+    .head-index .gloss {
+      grid-column: 2;
+    }
   }
 
   code {
