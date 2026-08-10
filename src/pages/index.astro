@@ -1,0 +1,228 @@
+---
+import Base from "../layouts/Base.astro";
+import MotorTrace from "../components/MotorTrace.astro";
+
+const title = "Aaditya Ananth";
+const description =
+  "Incoming UT Austin undergraduate. Motor rehabilitation research, sensor hardware, and small tools I build for myself.";
+
+// Only public repos get links. Verified with `gh repo view <name> --json visibility`
+// on 2026-08-09. liftlog, fitcheck and notion-task-automation are private and are
+// listed without links on purpose.
+const builds = [
+  {
+    name: "utdining",
+    what: "Ranks UT dining options against what Cronometer says you have left for the day.",
+    href: "https://github.com/aadityathegreat/utdining",
+  },
+  {
+    name: "liftlog",
+    what: "Offline-first strength training tracker. Installs to the home screen.",
+    href: null,
+  },
+  {
+    name: "fitcheck",
+    what: "Small app for keeping track of what is clean, worn, or in the wash.",
+    href: null,
+  },
+  {
+    name: "notion-task-automation",
+    what: "Nightly job that tidies my task database and sends me a digest.",
+    href: null,
+  },
+];
+
+const experience = [
+  {
+    org: "AP Research and Career Independent Study",
+    place: "with Cook Children's Medical",
+    when: "Aug 2024 to May 2026",
+    status: "completed",
+    body: [
+      "A nine month study of how regional politics in Texas affect women's access to neurology care. I pulled statewide neurologist supply, insurance rates and stroke outcome data into one cross-sectional design and ran regressions on it.",
+      "I also built an adaptive learning system for neuroscience education, working with neurosurgeon Dr. Daniel Hansen to keep it close to how clinical training actually works.",
+    ],
+  },
+  {
+    org: "Youth Path Foundation",
+    place: "Frisco, TX",
+    when: "Aug 2025 to May 2026",
+    status: "research intern",
+    body: [
+      "PCR and gel electrophoresis on more than 30 DNA samples, supporting neurology and cytogenetics work.",
+    ],
+  },
+  {
+    org: "Medical City Plano, Neuro ICU",
+    place: "Plano, TX",
+    when: "Jun to Aug 2024",
+    status: "volunteer to intern",
+    body: [
+      "Checked more than 500 patient charts for accuracy across teams and cut redundant steps out of the documentation workflow, which brought patient update times down.",
+      "Bedside support during stroke and end of life cases. This is where the rehabilitation questions started being real to me rather than academic.",
+    ],
+  },
+];
+---
+
+<Base title={title} description={description}>
+  <main class="shell">
+    <header>
+      <h1 class="identity-reveal">Aaditya Ananth</h1>
+      <p class="lede">
+        Incoming undergraduate at UT Austin, Fall 2026. Last summer I built a stroke-aide device for
+        pianists out of force sensors and a microcontroller, then ran the study that tested it.
+      </p>
+    </header>
+
+    <section class="section" aria-labelledby="research">
+      <h2 class="section-head" id="research">Research</h2>
+
+      <div class="entry">
+        <div class="entry-rail">
+          <span>Jun to Jul 2025</span>
+          <span class="sep">·</span>
+          <span>UT Austin</span>
+          <span class="sep">·</span>
+          <span class="entry-note">completed</span>
+        </div>
+
+        <div>
+          <h3>A stroke-aide device for pianists</h3>
+          <p class="quiet">Freshman Research Initiative, High School Research Academy</p>
+          <p>
+            Playing the piano asks a hand to do something precise and repeatable, which makes it a
+            useful place to watch fine motor control. I built a device that reads what a pianist's
+            hands are doing, with a force sensor under each key and a microcontroller sampling them
+            while you play. It came in at 99.7% accuracy in lab testing.
+          </p>
+          <p>
+            I designed and ran the human subject side as well, more than 30 participants, to check
+            that the device measured what it claimed to. Patrick Benfield and Rhiannon Morris
+            mentored the research design and the analysis. The project took top presentation
+            recognition at the end of the program.
+          </p>
+
+          <MotorTrace />
+
+          <figure class="figure">
+            <div class="figure-pending">
+              Photograph of the device pending. Drop it in <code>public/img/</code> and swap this block.
+            </div>
+          </figure>
+
+          <p>
+            <a href="https://github.com/aadityathegreat/stroke-fine-motor-rehab"
+              >Firmware and analysis code on GitHub</a
+            >
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="experience">
+      <h2 class="section-head" id="experience">Before that</h2>
+
+      {
+        experience.map((e) => (
+          <article class="entry">
+            <div class="entry-rail">
+              <span>{e.when}</span>
+              <span class="sep">·</span>
+              <span class="entry-note">{e.status}</span>
+            </div>
+            <div>
+              <h3>{e.org}</h3>
+              <p class="quiet">{e.place}</p>
+              {e.body.map((para) => (
+                <p>{para}</p>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </section>
+
+    <section class="section" aria-labelledby="builds">
+      <h2 class="section-head" id="builds">Other things I've built</h2>
+      <ul class="ledger">
+        {
+          builds.map((b) => (
+            <li>
+              <span class="name">{b.name}</span>
+              <span class="what">{b.what}</span>
+              {b.href ? (
+                <a class="link" href={b.href}>
+                  code
+                </a>
+              ) : (
+                <span class="link quiet">private</span>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="about">
+      <h2 class="section-head" id="about">About</h2>
+      <p>
+        I grew up in Prosper, Texas and finished high school there in May 2026. Most of what I've
+        worked on since has circled the same thing, which is what happens to people after a stroke
+        and how you measure whether they're getting better.
+      </p>
+      <p>
+        I'm working toward medicine, and I'd rather get there having built things that were actually
+        used than having only read about them.
+      </p>
+    </section>
+
+    <section class="section contact" aria-labelledby="contact">
+      <h2 class="section-head" id="contact">Contact</h2>
+      <ul class="contact-list">
+        <li>
+          <a href="mailto:aa228227&#64;eid.utexas.edu">aa228227&#64;eid.utexas.edu</a>
+        </li>
+        <li>
+          <a href="https://github.com/aadityathegreat">GitHub</a>
+        </li>
+        <li>
+          <a href="https://www.linkedin.com/in/aaditya-ananth-824556391">LinkedIn</a>
+        </li>
+      </ul>
+    </section>
+
+    <p class="colophon">
+      Set in Literata and Atkinson Hyperlegible Next. Built with Astro, no trackers.
+    </p>
+  </main>
+</Base>
+
+<style>
+  /* Move 4 — one reveal, on one element, once. Job: preventing a jarring change
+     as the webfont and the first line land together. The moment this becomes a
+     per-section pattern it turns into the fade-in-on-scroll tell. */
+  .identity-reveal {
+    animation: identity-in 700ms var(--ease-out) both;
+  }
+
+  @keyframes identity-in {
+    from {
+      clip-path: inset(100% 0 0 0);
+      opacity: 0;
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+      opacity: 1;
+    }
+  }
+
+  header h1 {
+    margin-bottom: var(--space-sm);
+  }
+
+  code {
+    font-family: ui-monospace, monospace;
+    font-size: 0.875em;
+  }
+</style>

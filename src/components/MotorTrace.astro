@@ -1,0 +1,306 @@
+---
+/**
+ * The signature element.
+ *
+ * Move 1 — the trace draws itself as the section scrolls into view. Job:
+ * explanation. Pure CSS scroll-driven animation, no JS listener.
+ *
+ * Move 2 — the keyboard. Job: explanation. Pressing a key highlights the segment
+ * of the trace that keystroke made and describes what the device was reading.
+ *
+ * IMPORTANT, and the reason this is framed the way it is: no measured data from
+ * the HSRA study was available at build time. The curve is schematic, its caption
+ * says so, and every key note describes the METHOD rather than a result. Nothing
+ * here presents an invented number as a measurement. If the real keystroke data
+ * turns up, swap the path and the notes can become actual values.
+ */
+
+const notes = [
+  "Each key sits over its own force sensor. At rest it reads a steady baseline.",
+  "Attack. Force climbs as the key travels down.",
+  "Peak force, the largest reading in that stroke.",
+  "Release is slower than the attack, so the curve falls off gently.",
+  "The flat stretch between strokes is the interval.",
+  "Variation between strokes shows up as differing peak heights.",
+  "The microcontroller samples every key while you play.",
+  "Validated against 30+ participants during the HSRA study.",
+];
+
+// Eight keystrokes, one per key. Widths and peaks are uneven because a real hand
+// is uneven and a regular comb would be a lie about what playing looks like.
+//
+// Each stroke's apex is pinned to the centre of its key below. That alignment is
+// the whole point of putting the two together, so it is computed rather than
+// eyeballed.
+const KEY_W = 100; // 800 viewBox / 8 keys
+const APEX = 0.42; // where the peak falls within the stroke
+
+// `apexY` is a y-coordinate, so a SMALLER number is a HARDER keystroke. The
+// order is arranged so the notes land on strokes that illustrate them: the
+// "largest reading" note sits on the tallest stroke, the "variation" note on the
+// shortest.
+const strokes = [
+  { w: 78, apexY: 62 },
+  { w: 70, apexY: 74 },
+  { w: 88, apexY: 40 },
+  { w: 74, apexY: 54 },
+  { w: 66, apexY: 66 },
+  { w: 92, apexY: 80 },
+  { w: 72, apexY: 50 },
+  { w: 84, apexY: 64 },
+];
+
+const events = strokes.map(({ w, apexY }, i) => ({
+  w,
+  peak: apexY,
+  x: KEY_W * (i + 0.5) - w * APEX,
+}));
+
+const BASE = 132;
+
+// Asymmetric on purpose: the finger goes down fast and comes off slowly, so the
+// attack takes about a third of the stroke and the release takes the rest.
+let d = `M 8 ${BASE}`;
+for (const { x, w, peak } of events) {
+  d += ` L ${x} ${BASE}`;
+  d += ` C ${x + w * 0.12} ${BASE}, ${x + w * 0.2} ${peak}, ${x + w * 0.34} ${peak}`;
+  d += ` C ${x + w * 0.5} ${peak}, ${x + w * 0.62} ${BASE - 6}, ${x + w} ${BASE}`;
+}
+d += ` L 792 ${BASE}`;
+
+// C D E F G A B C. The black keys are decoration that makes the strip legible as
+// a keyboard; they carry no interaction and are hidden from assistive tech.
+const blackKeyAfter = [0, 1, 3, 4, 5];
+---
+
+<figure class="trace">
+  <div class="trace-plot">
+    <svg viewBox="0 0 800 150" role="img" aria-labelledby="trace-title">
+      <title id="trace-title">
+        Schematic force curve for eight piano keystrokes. Each stroke rises quickly to a peak and
+        falls off more slowly, and the peaks differ from one stroke to the next.
+      </title>
+
+      <line class="trace-base" x1="8" y1={BASE} x2="792" y2={BASE} />
+
+      {
+        events.map((_, i) => (
+          <rect class="trace-band" data-band={i} x={KEY_W * i} y="14" width={KEY_W} height={BASE - 14} />
+        ))
+      }
+
+      <path class="trace-path" d={d} pathLength="100" fill="none" />
+    </svg>
+  </div>
+
+  <div class="keyboard">
+    <div class="keys-white" role="group" aria-label="Keystrokes in the trace above">
+      {
+        events.map((_, i) => (
+          <button type="button" class="key" data-key={i} aria-describedby="trace-note">
+            <span class="visually-hidden">Keystroke {i + 1}</span>
+          </button>
+        ))
+      }
+    </div>
+    <div class="keys-black" aria-hidden="true">
+      {blackKeyAfter.map((n) => <span style={`left:${((n + 1) * 100) / 8}%`} />)}
+    </div>
+  </div>
+
+  <figcaption>
+    <p id="trace-note" class="trace-note">
+      Eight keystrokes. Hover or tap a key to see what the device was reading there.
+    </p>
+    <p class="trace-caveat">
+      The curve is schematic, drawn to show the shape of a keystroke rather than plotted from the
+      study's recordings.
+    </p>
+  </figcaption>
+</figure>
+
+<style>
+  .trace {
+    margin: var(--space-xl) 0 var(--space-2xl);
+  }
+
+  .trace-plot svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .trace-base {
+    stroke: var(--rule);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .trace-path {
+    stroke: var(--trace);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: draw-trace linear forwards;
+    animation-timeline: view();
+    animation-range: entry 20% cover 60%;
+  }
+
+  @keyframes draw-trace {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* Browsers without scroll-driven animation get the finished line, not a
+     permanently invisible one. */
+  @supports not (animation-timeline: view()) {
+    .trace-path {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .trace-band {
+    fill: var(--trace);
+    opacity: 0;
+    transition: opacity 240ms ease;
+  }
+
+  .trace-band[data-active] {
+    opacity: 0.09;
+  }
+
+  /* --- the keyboard ------------------------------------------------------- */
+
+  .keyboard {
+    position: relative;
+    margin-top: var(--space-2xs);
+  }
+
+  .keys-white {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 2px;
+  }
+
+  .key {
+    appearance: none;
+    /* 44px so it is genuinely usable with a thumb */
+    min-height: 52px;
+    border: 0;
+    border-radius: 0 0 3px 3px;
+    /* Aged ivory. This is the palette's own name for the colour, used literally. */
+    background: color-mix(in srgb, var(--ink) 78%, var(--raised));
+    cursor: pointer;
+    padding: 0;
+    transition:
+      background 180ms ease,
+      transform 180ms var(--ease-out);
+    transform-origin: top center;
+  }
+
+  .key:hover,
+  .key[data-active] {
+    background: color-mix(in srgb, var(--accent) 55%, var(--ink));
+  }
+
+  .key:active {
+    transform: scaleY(0.97);
+  }
+
+  .keys-black {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .keys-black span {
+    position: absolute;
+    top: 0;
+    width: 7%;
+    height: 62%;
+    margin-left: -3.5%;
+    background: var(--page);
+    border-radius: 0 0 2px 2px;
+  }
+
+  /* --- caption ------------------------------------------------------------ */
+
+  figcaption {
+    margin-top: var(--space-md);
+  }
+
+  .trace-note {
+    color: var(--ink-dim);
+    font-size: 0.9375rem;
+    margin-bottom: var(--space-2xs);
+    /* Reserve the space so swapping the text never shifts the page. */
+    min-height: 3.1em;
+  }
+
+  .trace-caveat {
+    color: color-mix(in srgb, var(--muted) 86%, var(--page));
+    font-size: 0.8125rem;
+    margin: 0;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .trace-path {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+
+    .key:active {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  // The only script on the page. Everything else renders without JS, and this
+  // degrades to a static diagram with a readable caption if it never runs.
+  const notes = [
+    "Each key sits over its own force sensor. At rest it reads a steady baseline.",
+    "Attack. Force climbs as the key travels down.",
+    "Peak force, the largest reading in that stroke.",
+    "Release is slower than the attack, so the curve falls off gently.",
+    "The flat stretch between strokes is the interval.",
+    "Variation between strokes shows up as differing peak heights.",
+    "The microcontroller samples every key while you play.",
+    "Validated against 30+ participants during the HSRA study.",
+  ];
+
+  const note = document.getElementById("trace-note");
+  const keys = document.querySelectorAll<HTMLButtonElement>(".key");
+  const bands = document.querySelectorAll<SVGRectElement>(".trace-band");
+  const resting = note?.textContent ?? "";
+
+  function show(i: number | null) {
+    bands.forEach((b, j) => b.toggleAttribute("data-active", j === i));
+    keys.forEach((k, j) => k.toggleAttribute("data-active", j === i));
+    if (note) note.textContent = i === null || !notes[i] ? resting : notes[i];
+  }
+
+  keys.forEach((key, i) => {
+    key.addEventListener("pointerenter", () => show(i));
+    key.addEventListener("focus", () => show(i));
+    key.addEventListener("click", () => show(i));
+    key.addEventListener("blur", () => show(null));
+  });
+
+  document.querySelector(".keyboard")?.addEventListener("pointerleave", () => show(null));
+</script>

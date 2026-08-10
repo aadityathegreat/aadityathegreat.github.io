@@ -1,0 +1,409 @@
+/* ---------------------------------------------------------------------------
+   Palette contract — "Carbon + piano ivory".
+   Source: the subject's own world. Piano ebony, aged ivory, brass hardware.
+   These hex values are the binding contract; they were contrast-verified as hex,
+   so they are not re-derived in oklch here. Derived tints use color-mix() so no
+   component ever introduces a literal.
+   --------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: dark;
+
+  --page: #121110;
+  --raised: #1a1816;
+  --ink: #e8e1d5;
+  --muted: #aaa196;
+  --accent: #b98d5b;
+  --border: #312c26;
+
+  /* Sanctioned exception: motor-trace annotation only. Nowhere else. */
+  --trace: #7fa6a0;
+
+  --focus: #e3c08a;
+
+  --rule: color-mix(in srgb, var(--border) 100%, transparent);
+  --rule-faint: color-mix(in srgb, var(--border) 55%, var(--page));
+  --ink-dim: color-mix(in srgb, var(--ink) 78%, var(--page));
+  --accent-quiet: color-mix(in srgb, var(--accent) 42%, var(--page));
+
+  --display: "Literata", Georgia, serif;
+  --body: "Atkinson Hyperlegible Next", "Segoe UI", sans-serif;
+
+  /* 4pt scale, semantic names */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+
+  --measure: 64ch;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "Literata";
+  src: url("/fonts/literata-latin-var.woff2") format("woff2-variations");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  src: url("/fonts/atkinson-next-latin-var.woff2") format("woff2-variations");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--body);
+  /* 17px. Reversed text needs a genuinely sturdy weight; 400 is the floor here. */
+  font-size: 1.0625rem;
+  font-weight: 400;
+  /* light-on-dark gets extra leading */
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 0;
+  text-wrap: balance;
+}
+
+/* Fixed steps, ratio >= 1.25 between adjacent sizes. */
+h1 {
+  font-size: clamp(2rem, 1.55rem + 2.1vw, 2.75rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+h2 {
+  font-size: 1.375rem;
+  letter-spacing: -0.005em;
+}
+
+h3 {
+  font-size: 1.0625rem;
+  font-family: var(--body);
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 var(--space-md);
+  max-width: var(--measure);
+}
+
+a {
+  color: var(--ink);
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: color 220ms ease;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: var(--space-2xl) 0;
+}
+
+::selection {
+  background: var(--accent-quiet);
+  color: var(--ink);
+}
+
+/* --------------------------------------------------------------------------- */
+
+.shell {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg) var(--space-4xl);
+}
+
+@media (min-width: 48rem) {
+  .shell {
+    padding-inline: var(--space-2xl);
+  }
+}
+
+.section {
+  margin-top: var(--space-2xl);
+}
+
+@media (min-width: 48rem) {
+  .section {
+    margin-top: var(--space-3xl);
+  }
+}
+
+.section-head {
+  font-family: var(--body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--rule);
+}
+
+.lede {
+  font-size: 1.125rem;
+  color: var(--ink);
+}
+
+.quiet {
+  color: var(--muted);
+}
+
+/* --- annotated index -------------------------------------------------------
+
+   The metadata rail. On phones it collapses to one muted line above each item,
+   which is the whole reason it beats a card: it degrades to something readable
+   instead of to a smaller card.
+   --------------------------------------------------------------------------- */
+
+.entry {
+  padding: var(--space-lg) 0;
+  border-top: 1px solid var(--rule-faint);
+}
+
+.entry:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.entry-rail {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  margin-bottom: var(--space-2xs);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.entry-rail .sep {
+  color: var(--rule);
+}
+
+.entry h3 {
+  margin-bottom: var(--space-2xs);
+}
+
+.entry p {
+  margin-bottom: 0;
+  color: var(--ink-dim);
+}
+
+.entry p + p {
+  margin-top: var(--space-xs);
+}
+
+@media (min-width: 52rem) {
+  .entry {
+    display: grid;
+    grid-template-columns: 9.5rem 1fr;
+    gap: var(--space-lg);
+  }
+
+  .entry-rail {
+    display: block;
+    margin-bottom: 0;
+    text-align: right;
+    line-height: 1.5;
+  }
+
+  .entry-rail .sep {
+    display: none;
+  }
+
+  .entry-rail span {
+    display: block;
+  }
+}
+
+/* Move 3 — margin metadata on demand.
+   Job: progressive disclosure. Present in the DOM and readable without the
+   interaction; the reveal only raises its contrast. */
+.entry-note {
+  /* Resting state still clears 4.5:1. The reveal raises contrast; it does not
+     rescue the text from being unreadable, which would make the metadata
+     hover-only in practice. */
+  color: color-mix(in srgb, var(--muted) 80%, var(--page));
+  transition: color 260ms ease;
+}
+
+.entry:hover .entry-note,
+.entry:focus-within .entry-note {
+  color: var(--muted);
+}
+
+/* --- builds ledger ---------------------------------------------------------
+   A text index, not cards. Five projects do not matter equally and the page
+   should not pretend they do.
+   --------------------------------------------------------------------------- */
+
+.ledger {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ledger li {
+  padding: var(--space-sm) 0;
+  border-top: 1px solid var(--rule-faint);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-xs);
+}
+
+.ledger li:first-child {
+  border-top: 0;
+}
+
+.ledger .name {
+  font-weight: 600;
+}
+
+.ledger .what {
+  color: var(--muted);
+  flex: 1 1 14rem;
+}
+
+.ledger .link {
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+/* --- figures ---------------------------------------------------------------
+   A light screenshot dropped straight onto #121110 punches a hole. The matte
+   frame mediates instead of faking a dark version of someone's UI.
+   --------------------------------------------------------------------------- */
+
+.figure {
+  margin: var(--space-xl) 0;
+}
+
+.figure-matte {
+  background: var(--raised);
+  border: 1px solid var(--rule);
+  padding: var(--space-sm);
+  border-radius: 3px;
+}
+
+.figure-matte img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1px;
+}
+
+.figure figcaption {
+  margin-top: var(--space-xs);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.figure-pending {
+  background: var(--raised);
+  border: 1px dashed var(--rule);
+  border-radius: 3px;
+  padding: var(--space-xl) var(--space-lg);
+  color: color-mix(in srgb, var(--muted) 84%, var(--page));
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* --- contact --------------------------------------------------------------- */
+
+.contact a {
+  font-size: 1.0625rem;
+}
+
+.contact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md) var(--space-xl);
+}
+
+/* Touch targets: WCAG 2.2 AA floor is 24px; the contact and CV controls are the
+   two things a PI actually taps, so they get the familiar 44px affordance. */
+.contact-list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.colophon {
+  margin-top: var(--space-4xl);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--rule-faint);
+  font-size: 0.8125rem;
+  color: color-mix(in srgb, var(--muted) 84%, var(--page));
+}
+
+/* --- reduced motion --------------------------------------------------------
+   A gentler equivalent, not a jump cut. Some of this motion carries meaning:
+   the trace renders already drawn rather than never drawing.
+   --------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .identity-reveal {
+    animation: none;
+    clip-path: none;
+    opacity: 1;
+  }
+
+  .trace-path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 120ms !important;
+  }
+}
