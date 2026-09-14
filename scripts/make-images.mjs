@@ -74,3 +74,35 @@ await sharp(Buffer.from(icon)).resize(32, 32).png().toFile(new URL("icon-32.png"
 
 const { width, height } = await sharp(new URL("og-image.png", out).pathname).metadata();
 console.log(`og-image.png ${width}x${height}, apple-touch-icon.png 180x180, icon-32.png 32x32`);
+
+/* ---------------------------------------------------------------------------
+   Portrait.
+
+   Source of truth is public/headshot-src.jpg, which is Aadi's own photograph and
+   is NOT committed at full size. This step crops it square on the face and emits
+   the two sizes the home page actually asks for, in AVIF and JPEG.
+
+   The step is skipped, not failed, when the source is absent, because the OG
+   card and the icons above must keep regenerating on a machine that has not been
+   given the photo.
+   --------------------------------------------------------------------------- */
+
+import { existsSync } from "node:fs";
+
+const portraitSrc = new URL("../public/headshot-src.jpg", import.meta.url).pathname;
+
+if (!existsSync(portraitSrc)) {
+  console.log("headshot-src.jpg absent, portrait step skipped");
+} else {
+  // 2x and 1x for a 220px slot. `attention` puts the crop on the face rather
+  // than the centre of the frame, which on this photo is the tie.
+  for (const size of [440, 220]) {
+    const base = sharp(portraitSrc).resize(size, size, {
+      fit: "cover",
+      position: sharp.strategy.attention,
+    });
+    await base.clone().avif({ quality: 62 }).toFile(new URL(`../public/headshot-${size}.avif`, import.meta.url).pathname);
+    await base.clone().jpeg({ quality: 82, mozjpeg: true }).toFile(new URL(`../public/headshot-${size}.jpg`, import.meta.url).pathname);
+  }
+  console.log("headshot-440/220 .avif + .jpg written");
+}

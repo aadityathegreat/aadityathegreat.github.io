@@ -1,0 +1,322 @@
+---
+import Base from "../layouts/Base.astro";
+import Contact from "../components/Contact.astro";
+
+const title = "Resume — Aaditya Ananth";
+const description =
+  "Education, research and clinical experience, leadership, and what I'm taking this semester.";
+
+// Every line on this page traces to library/resume/master.md. Nothing is added
+// here that is not on the master, and nothing is inflated past what it says.
+// Deliberately absent: phone number and street address. A resume page on a
+// public site carries city and state only.
+
+const coursework = [
+  { code: "BME 303", name: "Introduction to Computing" },
+  { code: "BME 303L", name: "Introduction to BME Design" },
+  { code: "E S 333T", name: "Engineering Communication" },
+  { code: "NSC 107J", name: "The Effective Health Care Professional" },
+  { code: "SOC 302", name: "Introduction to the Study of Society" },
+  { code: "SOC 354K", name: "Sociology of Health and Illness" },
+];
+
+const experience = [
+  {
+    role: "Researcher",
+    org: "Freshman Research Initiative, High School Research Academy",
+    place: "UT Austin",
+    when: "Jun 2025 to Jul 2025",
+    points: [
+      "Led a student team building a stroke-aide device for pianists out of sensors and microcontrollers, at 99.7% accuracy in lab tests. I owned the firmware, the underlying physics, and part of the CAD.",
+      "Designed and ran human-subject experiments with 30+ participants to validate the device.",
+      "Worked with Patrick Benfield and Rhiannon Morris on research design, rapid prototyping, and analysis.",
+      "Top presentation recognition.",
+    ],
+  },
+  {
+    role: "Researcher",
+    org: "Career Independent Study and AP Research, with Cook Children's Medical",
+    place: "Prosper, TX",
+    when: "Aug 2024 to May 2026",
+    points: [
+      "A nine month independent study of how regional politics in Texas affect gender disparities in access to neurology care.",
+      "Designed a cross-sectional study pulling statewide neurologist supply and stroke outcome data into one dataset, then ran regressions on political orientation and insurance rates against neurologist availability.",
+      "Built an adaptive learning system for neuroscience education that adjusts to how the user is actually engaging with it.",
+      "Worked with pediatric neurosurgeon Dr. Daniel Hansen on the methodology and on making the adaptive-learning side line up with real clinical training.",
+      "Coordinated Prosper ISD's Toyota Symposium, 50+ mentors and 100+ students, and opened it by introducing Dr. Hansen.",
+    ],
+  },
+  {
+    role: "Research Intern",
+    org: "Youth Path Foundation",
+    place: "Frisco, TX",
+    when: "Aug 2025 to May 2026",
+    points: [
+      "Ran PCR and gel electrophoresis on 30+ DNA samples for neurology and cytogenetics work.",
+      "Built outreach content and tracked engagement for the foundation's campaigns.",
+    ],
+  },
+  {
+    role: "Volunteer, then Intern",
+    org: "Neuro ICU, Medical City Plano",
+    place: "Plano, TX",
+    when: "Jun 2024 to Aug 2024",
+    points: [
+      "Audited 500+ patient charts for accuracy and continuity across multidisciplinary teams.",
+      "Cut redundancies out of the documentation workflow, which shortened patient-update wait times.",
+      "Trained incoming volunteers on sanitation protocol, charting, and equipment setup.",
+      "Bedside support during critical neurology cases, including stroke and end-of-life care.",
+    ],
+  },
+];
+
+const leadership = [
+  {
+    role: "Vice President and Manager, Prosper Eagle Shack",
+    when: "Aug 2022 to May 2026",
+    points: [
+      "Ran a student store through $250K+ in revenue and supervised 100+ student employees, with a 7-member leadership team under me.",
+      "Cut underperforming products, rebuilt the product mix, and tracked inventory and margin to grow it.",
+      "Wrote the internal onboarding documentation, which brought turnover down.",
+    ],
+  },
+  {
+    role: "Founder and Captain, Prosper Policy Debate",
+    when: "Aug 2022 to May 2026",
+    points: [
+      "Started the team from nothing and trained four new state qualifiers in CX and LD.",
+      "#1 in TFA State qualifying points for 2024-25, three-time TFA State qualifier, NSDA Academic All-American.",
+      "First student at Prosper High School to qualify for TFA State.",
+    ],
+  },
+  {
+    role: "Vice President, American Red Cross club",
+    when: "Jun 2023 to May 2026",
+    points: [
+      "Co-built FitTrack, a beta-stage fitness and neuro-rehab app, on a two person team. Pilot tested for stroke rehabilitation.",
+      "Coordinated Relay for Life with 500+ participants, and fundraised 1,000+ vaccines for Vaccinate a Village as a general member.",
+      "Presidential Volunteer Service Gold Award in 2024 and 2025, Congressional Volunteer Service Gold Award for 500+ hours, and the GLOW National Volunteer Award.",
+    ],
+  },
+  {
+    role: "Vice President, Prosper DECA",
+    when: "Aug 2022 to May 2026",
+    points: [
+      "Organized business fairs and mock competitions with 100+ students, leading a 20-member committee.",
+      "2nd at State and 13th at ICDC in the DECA SBE event.",
+    ],
+  },
+  {
+    role: "Co-Founder and President, Ace for Prosper",
+    when: "Aug 2022 to May 2024",
+    points: [
+      "Ran a 224-signature petition and a 100+ person rally for expanded community athletic facilities, then drafted and presented a maintenance and access plan.",
+    ],
+  },
+  {
+    role: "Student Ambassador, Prosper High School",
+    when: "May 2025 to May 2026",
+    points: [
+      "Mentored 20+ new students through scheduling, campus navigation, and picking activities, and helped plan four orientation events.",
+    ],
+  },
+];
+---
+
+<Base title={title} description={description} path="/resume">
+  <header class="page-head">
+    <h1>Resume</h1>
+    <p class="lede">
+      The short version of what I've done. <a href="/research">Research</a> goes into the three
+      things that actually matter in more detail.
+    </p>
+  </header>
+
+  <section class="section" aria-labelledby="education">
+    <h2 class="section-head" id="education">Education</h2>
+
+    <article class="entry">
+      <div class="rail"><span class="when">Fall 2026 to May 2030</span></div>
+      <div class="body">
+        <h3>The University of Texas at Austin</h3>
+        <p class="org">Biomedical Engineering, Cockrell School of Engineering</p>
+        <ul>
+          <li>Freshman Research Initiative and High School Research Academy alum, Summer 2025.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="rail"><span class="when">Aug 2022 to May 2026</span></div>
+      <div class="body">
+        <h3>Prosper High School</h3>
+        <p class="org">Prosper, Texas</p>
+        <ul>
+          <li>Gifted and Talented program.</li>
+          <li>AP Scholar with Distinction. AP Calculus BC: 5, self-studied.</li>
+          <li>College Board Rural and Small Town Recognition.</li>
+        </ul>
+      </div>
+    </article>
+  </section>
+
+  <section class="section" aria-labelledby="now-taking">
+    <h2 class="section-head" id="now-taking">This semester</h2>
+    <p class="quiet">Fall 2026, first year.</p>
+    <ul class="courses">
+      {
+        coursework.map((c) => (
+          <li>
+            <span class="code">{c.code}</span>
+            <span class="course-name">{c.name}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="section" aria-labelledby="experience">
+    <h2 class="section-head" id="experience">Research and clinical</h2>
+    {
+      experience.map((e) => (
+        <article class="entry">
+          <div class="rail">
+            <span class="when">{e.when}</span>
+            <span class="where">{e.place}</span>
+          </div>
+          <div class="body">
+            <h3>{e.role}</h3>
+            <p class="org">{e.org}</p>
+            <ul>
+              {e.points.map((p) => (
+                <li>{p}</li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      ))
+    }
+  </section>
+
+  <section class="section" aria-labelledby="leadership">
+    <h2 class="section-head" id="leadership">Leadership</h2>
+    {
+      leadership.map((l) => (
+        <article class="entry">
+          <div class="rail">
+            <span class="when">{l.when}</span>
+          </div>
+          <div class="body">
+            <h3>{l.role}</h3>
+            <ul>
+              {l.points.map((p) => (
+                <li>{p}</li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      ))
+    }
+  </section>
+
+  <Contact lead="Happy to send a PDF version if that's easier." />
+</Base>
+
+<style>
+  /* The same research-note shape as /research. A narrow metadata rail carries
+     dates and place, the wide column carries the actual content, hairline rules
+     separate. No cards. */
+
+  .entry {
+    display: grid;
+    gap: var(--space-xs);
+    padding: var(--space-lg) 0;
+    border-top: 1px solid var(--rule-faint);
+  }
+
+  .entry:first-of-type {
+    border-top: none;
+    padding-top: var(--space-xs);
+  }
+
+  @media (min-width: 52rem) {
+    .entry {
+      grid-template-columns: 13rem 1fr;
+      gap: var(--space-lg);
+    }
+  }
+
+  .rail {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+  }
+
+  .when,
+  .where {
+    font-size: 0.875rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .body h3 {
+    margin-bottom: var(--space-2xs);
+  }
+
+  .org {
+    color: var(--ink-dim);
+    margin-bottom: var(--space-xs);
+  }
+
+  .body ul {
+    margin: 0;
+    padding-left: 1.1em;
+  }
+
+  .body li {
+    margin-bottom: var(--space-2xs);
+    max-width: var(--measure);
+  }
+
+  /* --- coursework ---------------------------------------------------------- */
+
+  .quiet {
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  .courses {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .courses li {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: var(--space-md);
+    padding: var(--space-sm) 0;
+    border-top: 1px solid var(--rule-faint);
+  }
+
+  .courses li:last-child {
+    border-bottom: 1px solid var(--rule-faint);
+  }
+
+  .code {
+    font-family: var(--display);
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .course-name {
+    color: var(--muted);
+  }
+
+  @media (max-width: 30rem) {
+    .courses li {
+      grid-template-columns: 1fr;
+      gap: var(--space-2xs);
+    }
+  }
+</style>

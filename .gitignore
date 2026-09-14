@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Portrait source, kept out of the repo. Generated sizes are committed.
+public/headshot-src.jpg

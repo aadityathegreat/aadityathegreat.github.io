@@ -4,7 +4,7 @@ import TraceRule from "../components/TraceRule.astro";
 
 const title = "Aaditya Ananth";
 const description =
-  "Incoming biomedical engineering freshman at UT Austin. I build things that measure whether people are getting better.";
+  "Biomedical engineering freshman at UT Austin. I build things that measure whether people are getting better.";
 
 const doors = [
   {
@@ -23,6 +23,11 @@ const doors = [
     what: "Small software I made because I wanted it to exist.",
   },
   {
+    href: "/resume",
+    label: "Resume",
+    what: "Education, research, clinical hours, and what I'm taking this semester.",
+  },
+  {
     href: "/goals",
     label: "Goals",
     what: "Where I'm trying to get, and how far off most of it still is.",
@@ -36,25 +41,43 @@ const doors = [
        deliberate motion and the fade-in-on-scroll tell. Nothing below animates on
        scroll anywhere on this page. -->
   <div class="intro">
+    <!-- The portrait leads, at the size of a passport photo rather than a hero.
+         It is here to put a face to the name for someone who has never met him,
+         which is a caption-sized job, not a banner-sized one. -->
+    <picture class="portrait reveal" style="--d: 120ms">
+      <source
+        type="image/avif"
+        srcset="/headshot-220.avif 1x, /headshot-440.avif 2x"
+      />
+      <img
+        src="/headshot-220.jpg"
+        srcset="/headshot-220.jpg 1x, /headshot-440.jpg 2x"
+        width="220"
+        height="220"
+        alt="Aaditya Ananth"
+        decoding="async"
+        fetchpriority="high"
+      />
+    </picture>
+
     <h1 class="identity">Aaditya Ananth</h1>
 
-    <div class="reveal" style="--d: 260ms">
+    <div class="reveal" style="--d: 380ms">
       <TraceRule />
     </div>
 
-    <p class="lede reveal" style="--d: 420ms">
-      I start biomedical engineering at UT Austin, Cockrell School, in Fall 2026, with the class of
-      2030.
+    <p class="lede reveal" style="--d: 520ms">
+      I'm a first year in biomedical engineering at UT Austin, Cockrell School, class of 2030.
     </p>
 
-    <p class="lede-2 reveal" style="--d: 560ms">
+    <p class="lede-2 reveal" style="--d: 660ms">
       I'm interested in stroke recovery, and specifically in how you measure whether someone is
       actually getting better instead of just saying they feel better. Last summer that turned into
       a device I built for pianists, with a force sensor under every key.
     </p>
   </div>
 
-  <nav class="doors reveal" style="--d: 720ms" aria-label="Sections of this site">
+  <nav class="doors reveal" style="--d: 820ms" aria-label="Sections of this site">
     <ul>
       {
         doors.map((d) => (
@@ -74,7 +97,7 @@ const doors = [
     </ul>
   </nav>
 
-  <p class="reach reveal" style="--d: 860ms">
+  <p class="reach reveal" style="--d: 960ms">
     Reach me at <a href="mailto:aa228227&#64;my.utexas.edu">aa228227&#64;my.utexas.edu</a>.
   </p>
 </Base>
@@ -161,6 +184,39 @@ const doors = [
 
   .intro {
     margin-bottom: var(--space-3xl);
+  }
+
+  /* --- portrait -------------------------------------------------------------
+     Elevation by tone and a hairline rule, the same as everything else on the
+     site. No card, no shadow, no ring of accent. The radius is small enough to
+     read as a trimmed photograph rather than an avatar chip.
+     -------------------------------------------------------------------------- */
+
+  .portrait {
+    display: block;
+    width: 110px;
+    margin-bottom: var(--space-lg);
+  }
+
+  .portrait img {
+    display: block;
+    width: 110px;
+    height: 110px;
+    border-radius: 3px;
+    border: 1px solid var(--rule);
+    background: var(--raised);
+    object-fit: cover;
+  }
+
+  @media (min-width: 46rem) {
+    .portrait,
+    .portrait img {
+      width: 132px;
+    }
+
+    .portrait img {
+      height: 132px;
+    }
   }
 
   .intro h1 {

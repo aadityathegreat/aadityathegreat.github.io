@@ -2,9 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "website",
+      "name": "site",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "/Users/aadi/dev/website", "run", "dev"],
+      "runtimeArgs": ["run", "dev"],
       "port": 4321
     }
   ]
