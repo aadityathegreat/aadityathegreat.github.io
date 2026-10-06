@@ -1,0 +1,172 @@
+---
+import Base from "../layouts/Base.astro";
+import Contact from "../components/Contact.astro";
+
+const title = "Healthcare Experience — Aaditya Ananth";
+const description =
+  "My clinical time so far, an EMT course and a Neuro ICU, and the patient-contact hours I'm working toward.";
+
+// NSC 107J e-portfolio Part 3 (2026-10-06), the healthcare-experience supporting page.
+// Every dated fact traces to library/resume/master.md, memory/wiki/entities/emt-program.md
+// or projects/premed-log/STATE.md. The EMT line stays "in progress, not yet certified"
+// until the NREMT result and the Idaho license actually exist (claims rule, master.md).
+// Reverse chronological, most recent first, as the assignment asks.
+const experience = [
+  {
+    id: "emt",
+    org: "EMT course and clinical rotation",
+    place: "RC Health Services EMS Academy, with ambulance shifts at Allegiance Mobile Health, Carrollton, TX",
+    when: "May 2026 to present",
+    status: "in progress, not yet certified",
+    body: [
+      "I finished the clinical rotation in August 2026. That was two 12-hour ambulance shifts, 24 hours in all, working under a preceptor and writing four patient care reports.",
+      "The NREMT exam is still ahead of me, so I'm not certified yet and I'm not calling myself an EMT until I am.",
+    ],
+  },
+  {
+    id: "neuro-icu",
+    org: "Medical City Plano, Neuro ICU",
+    place: "Plano, TX",
+    when: "Jun to Aug 2024",
+    status: "volunteer to intern",
+    body: [
+      "Sixteen hours a week for eight weeks. I gave bedside support during stroke and end of life cases, helping physicians and nurses with monitoring and care.",
+      "I also checked more than 500 patient charts for accuracy and trained the incoming volunteers on sanitation, charting and equipment setup.",
+      "This is where the rehabilitation questions stopped being academic for me.",
+    ],
+  },
+];
+
+const goals = [
+  {
+    k: "NREMT",
+    v: "Pass the exam and finish the course, so the EMT work counts as a credential and not only as hours.",
+  },
+  {
+    k: "Clinical volunteering",
+    v: "Start patient-facing volunteering during the school year, so clinical time doesn't only happen over breaks.",
+  },
+  {
+    k: "Shadowing",
+    v: "Shadow physicians, starting with neurology and neurosurgery, since that's where I'm trying to end up.",
+  },
+  {
+    k: "A running log",
+    v: "Write down hours and what I saw as they happen, so none of it has to be reconstructed from memory later.",
+  },
+];
+---
+
+<Base title={title} description={description} path="/clinical">
+  <header class="page-head">
+    <h1>Healthcare Experience</h1>
+    <p class="lede">
+      I want patient contact to stay in front of me while I'm doing engineering coursework. This page
+      keeps track of the clinical time I've done, what I'm working toward next, and what I expect
+      to get out of it.
+    </p>
+  </header>
+
+  <section class="section" aria-labelledby="so-far">
+    <h2 class="section-head" id="so-far">So far</h2>
+
+    {
+      experience.map((e) => (
+        <article class="entry" id={e.id}>
+          <div class="entry-rail">
+            <span>{e.when}</span>
+            <span class="sep">·</span>
+            <span class="entry-note">{e.status}</span>
+          </div>
+          <div>
+            <h3>{e.org}</h3>
+            <p class="quiet">{e.place}</p>
+            {e.body.map((para) => (
+              <p>{para}</p>
+            ))}
+          </div>
+        </article>
+      ))
+    }
+  </section>
+
+  <section class="section" aria-labelledby="next">
+    <h2 class="section-head" id="next">Next</h2>
+    <dl class="facts">
+      {
+        goals.map((g) => (
+          <div class="fact">
+            <dt>{g.k}</dt>
+            <dd>{g.v}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="section" aria-labelledby="gain">
+    <h2 class="section-head" id="gain">What I hope to gain</h2>
+    <p>
+      I want the questions I run into with patients to be the ones I go study in a lab. Clinical
+      time is where those questions come from, so I'd rather start collecting them now, alongside
+      the engineering, than wait until after.
+    </p>
+    <p>
+      The longer version of where this is headed is on the <a href="/goals">goals page</a>, and the
+      research it connects to is on the <a href="/research">research page</a>.
+    </p>
+  </section>
+
+  <Contact lead="If you know of clinical volunteering or shadowing near campus, I'd like to hear about it." />
+</Base>
+
+<style>
+  .page-head {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .page-head h1 {
+    margin-bottom: var(--space-sm);
+  }
+
+  .facts {
+    margin: 0;
+    max-width: var(--measure);
+  }
+
+  .fact {
+    padding: var(--space-md) 0;
+    border-top: 1px solid var(--rule-faint);
+  }
+
+  .fact:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .fact dt {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--muted);
+    margin-bottom: var(--space-2xs);
+  }
+
+  .fact dd {
+    margin: 0;
+    color: var(--ink-dim);
+  }
+
+  @media (min-width: 40rem) {
+    .fact {
+      display: grid;
+      grid-template-columns: 8rem 1fr;
+      gap: var(--space-lg);
+      align-items: baseline;
+    }
+
+    .fact dt {
+      margin-bottom: 0;
+      text-align: right;
+    }
+  }
+</style>
